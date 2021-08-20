@@ -3,6 +3,7 @@ import { Link, Route, Switch } from 'react-router-dom'
 import Home from './components/homepage';
 import Help from './components/Help'
 import Shop from './components/Shop';
+import Conferm from './components/Conferm'
 
 const App = () => {
   return (
@@ -17,7 +18,9 @@ const App = () => {
         </div>
       </nav>
       <Switch>
-      
+      <Route path= "/pizza/conferm" >
+        <Conferm/>
+        </Route>
 
         <Route path= "/help" >
         <Help/>
@@ -33,7 +36,7 @@ const App = () => {
       
         </Switch>
        
-
+{/* /pizza/conferm */}
 
 
     </div>

@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import schema from './schema'
 import * as yup from "yup"
 import axios from 'axios';
@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const Shop = () => {
     // our values 
-const [order,setOrder] = useState({
+const [Data,setData] = useState({
     size:"",
     sauce:"",
     topping1:false,
@@ -39,12 +39,12 @@ const [disabled,setDisabled] = useState(true);
                 // yup  //
 
 useEffect(() => {
-    schema.isValid(order).then(valid => {
+    schema.isValid(Data).then(valid => {
         console.log(valid);                    // comment out later
         setDisabled(!valid) 
     })
 
-},[order])
+},[Data])
 
 const validation = (name, value) => {
 
@@ -61,7 +61,7 @@ const inputChange = (event) => {
     const { value,name,checked,type} = event.target;
     const newValue = type === "checkbox" ? checked : value;
     validation(name, newValue);
-    setOrder({...order,[name]:newValue});
+    setData({...Data,[name]:newValue});
     // console.log("value" ,name , newValue);
 }
 
@@ -70,10 +70,11 @@ const inputChange = (event) => {
 const submit = (event) => {
     event.preventDefault()
 
-        axios.post('https://reqres.in/api/orders',order)
+        axios.post('https://reqres.in/api/orders',Data)
             .then(response => {
                 setPost(response.data);   /// use on the next conforemantion page 
-                setOrder({ size:"",sauce:"",topping1:"",topping2:"",topping3:"",topping4:"","name-input":"",instructions:''})
+                console.log(response.data);
+                setData({ size:"",sauce:"",topping1:"",topping2:"",topping3:"",topping4:"","name-input":"",instructions:''})
             }).catch(error => {
                 setPostError("the order was unsuccessful. please try again later we are working to solve the issue")
             })
@@ -93,7 +94,7 @@ const submit = (event) => {
             <label htmlFor="size-dropdown"> Choose the size </label>
             
 
-            <select id="size-dropdown" name ="size" value ={order.size} onChange={inputChange}>
+            <select id="size-dropdown" name ="size" value ={Data.size} onChange={inputChange}>
             {errors.size.length > 0 ? <p className={"error"}>{errors.size}</p> : null} 
                 <option>--Please choose an option--</option>
                 <option value="Large"> Large</option>
@@ -108,19 +109,19 @@ const submit = (event) => {
 
            
              Original Red
-                <input onChange={inputChange} type="radio" name ="sauce" value ="red" checked={order.sauce === "red"}   /> 
+                <input onChange={inputChange} type="radio" name ="sauce" value ="red" checked={Data.sauce === "red"}   /> 
              <br/>
 
             Garlic Ranch
-                <input onChange={inputChange} type="radio" name ="sauce" value ='Ranch' checked={order.sauce === "Ranch"}  />
+                <input onChange={inputChange} type="radio" name ="sauce" value ='Ranch' checked={Data.sauce === "Ranch"}  />
             
             <br/>
            BBQ Sauce
-                <input onChange={inputChange} type="radio" name ="sauce" value ="BBQ" checked={order.sauce === "BBQ"}  />
+                <input onChange={inputChange} type="radio" name ="sauce" value ="BBQ" checked={Data.sauce === "BBQ"}  />
          
                 <br/>
             Spinach Alfredo
-                <input onChange={inputChange} type="radio" name ="sauce" value ="Alfredo" checked={order.sauce === "Alfredo"}  />
+                <input onChange={inputChange} type="radio" name ="sauce" value ="Alfredo" checked={Data.sauce === "Alfredo"}  />
                 
                 
         
@@ -132,32 +133,32 @@ const submit = (event) => {
             <input onChange={inputChange}
           type="checkbox"
           name="topping1"
-          checked={order.topping1}
-        value={order.topping1}
+          checked={Data.topping1}
+        value={Data.topping1}
         />
          <br/>
             Canadion Bacon
             <input onChange={inputChange}
           type="checkbox"
           name="topping2"
-          checked={order.topping2}
-        value={order.topping2}
+          checked={Data.topping2}
+        value={Data.topping2}
         />
          <br/>
             Grilled Chicken
             <input onChange={inputChange}
           type="checkbox"
           name="topping3"
-          checked={order.topping3}
-        value={order.topping3}
+          checked={Data.topping3}
+        value={Data.topping3}
         />
          <br/>
             Onions
             <input onChange={inputChange}
           type="checkbox"
           name="topping4"
-          checked={order.topping4}
-        value={order.topping4}
+          checked={Data.topping4}
+        value={Data.topping4}
         />
 
 
@@ -167,11 +168,11 @@ const submit = (event) => {
                                         {/* error massage */}
             {errors['name-input'].length > 0 ? <p className={"error"}>{errors['name-input']}</p> : null} 
 
-            <input onChange={inputChange} type ="text" name="name-input"  id="name-input" placeholder="john "  value={order["name-input"]}/>
+            <input onChange={inputChange} type ="text" name="name-input"  id="name-input" placeholder="john "  value={Data["name-input"]}/>
             
             <label htmlFor="special-text"> Special Instructions </label>
             
-            <textarea onChange={inputChange} type ="text" name="instructions"  id="special-text" placeholder="I want my pizza to have a ... "  value={order.instructions}/>
+            <textarea onChange={inputChange} type ="text" name="instructions"  id="special-text" placeholder="I want my pizza to have a ... "  value={Data.instructions}/>
             
 
 
@@ -182,7 +183,10 @@ const submit = (event) => {
 
             <pre className={'error'}>{JSON.stringify(postError, null, 2)}</pre>
 
-                <button type="submit" disabled={disabled} id="order-button">Order</button>
+                <button type="submit" onSubmit={submit} disabled={disabled} id="order-button" className="btn"> 
+                <Link className="btn" to="/pizza/conferm">Submit Order</Link>
+                
+                </button>
         </form>
 
       </div>
