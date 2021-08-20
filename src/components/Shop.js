@@ -2,6 +2,8 @@ import React,{useState,useEffect} from 'react';
 // import { Link } from 'react-router-dom';
 import schema from './schema'
 import * as yup from "yup"
+import axios from 'axios';
+
 
 const Shop = () => {
     // our values 
@@ -28,6 +30,8 @@ const [errors,setErrors] = useState({
    
 });
 
+const [post, setPost] = useState([]) 
+const [postError, setPostError] = useState()
 
 const [disabled,setDisabled] = useState(true);
 
@@ -61,10 +65,21 @@ const inputChange = (event) => {
     // console.log("value" ,name , newValue);
 }
 
+        // axios //
+
 const submit = (event) => {
     event.preventDefault()
-    setOrder({ size:"",sauce:"",topping1:"",topping2:"",topping3:"",topping4:"","name-input":"",instructions:''})
-}
+
+        axios.post('https://reqres.in/api/orders',order)
+            .then(response => {
+                setPost(response.data);   /// use on the next conforemantion page 
+                setOrder({ size:"",sauce:"",topping1:"",topping2:"",topping3:"",topping4:"","name-input":"",instructions:''})
+            }).catch(error => {
+                setPostError("the order was unsuccessful. please try again later we are working to solve the issue")
+            })
+   
+
+        }
 
     return (
 
@@ -76,17 +91,22 @@ const submit = (event) => {
         <form id="pizza-form" onSubmit={submit} >
             {/* selection of size */}
             <label htmlFor="size-dropdown"> Choose the size </label>
+            
 
             <select id="size-dropdown" name ="size" value ={order.size} onChange={inputChange}>
+            {errors.size.length > 0 ? <p className={"error"}>{errors.size}</p> : null} 
                 <option>--Please choose an option--</option>
                 <option value="Large"> Large</option>
                 <option value="Medium"> Medium </option>
                 <option value="Small"> Small </option>
-               
+
+                
             </select>
             
                 {/* sauce            checked */}
             <label className ="choose-sauce"htmlFor="sauce"> Choose the sauce  </label>
+
+           
              Original Red
                 <input onChange={inputChange} type="radio" name ="sauce" value ="red" checked={order.sauce === "red"}   /> 
              <br/>
@@ -144,16 +164,24 @@ const submit = (event) => {
 
 {/* tell us in text */}
             <label htmlFor="name-input"> Tell us your name </label>
+                                        {/* error massage */}
+            {errors['name-input'].length > 0 ? <p className={"error"}>{errors['name-input']}</p> : null} 
+
             <input onChange={inputChange} type ="text" name="name-input"  id="name-input" placeholder="john "  value={order["name-input"]}/>
             
             <label htmlFor="special-text"> Special Instructions </label>
+            
             <textarea onChange={inputChange} type ="text" name="instructions"  id="special-text" placeholder="I want my pizza to have a ... "  value={order.instructions}/>
             
 
 
             {/* button   set up disable */}
             <label htmlFor="order-button"> Ready to Order: </label>
-            {/* change the disbale from true to state value  */}
+            
+
+
+            <pre className={'error'}>{JSON.stringify(postError, null, 2)}</pre>
+
                 <button type="submit" disabled={disabled} id="order-button">Order</button>
         </form>
 

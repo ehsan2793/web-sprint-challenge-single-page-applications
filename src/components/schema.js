@@ -10,7 +10,7 @@ const schema = yup.object().shape({
     topping2:yup.boolean(),
     topping3:yup.boolean(),
     topping4:yup.boolean(),
-    "name-input": yup.string().required('name must be at least 2 characters').min(2,"name must be at least 2 characters"),
+    "name-input": yup.string().required('name is required').min(2,"name must be at least 2 characters"),
     instructions:yup.string()
 
 

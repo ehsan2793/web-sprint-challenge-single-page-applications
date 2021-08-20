@@ -93,3 +93,7 @@ label {
   font-weight: bold;
   background-color:rgb(134, 131, 131,0.5);
 }
+.error {
+  font-size: 1.2rem;
+    color: red;
+}
