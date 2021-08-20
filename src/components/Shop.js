@@ -94,7 +94,7 @@ const submit = (event) => {
             <label htmlFor="size-dropdown"> Choose the size </label>
             
 
-            <select id="size-dropdown" name ="size" value ={Data.size} onChange={inputChange}>
+            <select id="size-dropdown" name ="size" value ={Data.size} onChange={inputChange} data-cy="size">
             {errors.size.length > 0 ? <p className={"error"}>{errors.size}</p> : null} 
                 <option>--Please choose an option--</option>
                 <option value="Large"> Large</option>
@@ -109,7 +109,7 @@ const submit = (event) => {
 
            
              Original Red
-                <input onChange={inputChange} type="radio" name ="sauce" value ="red" checked={Data.sauce === "red"}   /> 
+                <input onChange={inputChange} type="radio" name ="sauce" value ="red" checked={Data.sauce === "red" } data-cy="sauce"   /> 
              <br/>
 
             Garlic Ranch
@@ -131,6 +131,7 @@ const submit = (event) => {
 
             Pepperoni
             <input onChange={inputChange}
+            data-cy="topping1"
           type="checkbox"
           name="topping1"
           checked={Data.topping1}
@@ -139,6 +140,7 @@ const submit = (event) => {
          <br/>
             Canadion Bacon
             <input onChange={inputChange}
+            data-cy="topping2"
           type="checkbox"
           name="topping2"
           checked={Data.topping2}
@@ -147,6 +149,7 @@ const submit = (event) => {
          <br/>
             Grilled Chicken
             <input onChange={inputChange}
+            data-cy="topping3"
           type="checkbox"
           name="topping3"
           checked={Data.topping3}
@@ -155,6 +158,7 @@ const submit = (event) => {
          <br/>
             Onions
             <input onChange={inputChange}
+             data-cy="topping4"
           type="checkbox"
           name="topping4"
           checked={Data.topping4}
@@ -168,11 +172,11 @@ const submit = (event) => {
                                         {/* error massage */}
             {errors['name-input'].length > 0 ? <p className={"error"}>{errors['name-input']}</p> : null} 
 
-            <input onChange={inputChange} type ="text" name="name-input"  id="name-input" placeholder="john "  value={Data["name-input"]}/>
+            <input onChange={inputChange} type ="text" name="name-input"  id="name-input" placeholder="john "  value={Data["name-input"]} data-cy="name-input"/>
             
             <label htmlFor="special-text"> Special Instructions </label>
             
-            <textarea onChange={inputChange} type ="text" name="instructions"  id="special-text" placeholder="I want my pizza to have a ... "  value={Data.instructions}/>
+            <textarea data-cy="instructions" onChange={inputChange} type ="text" name="instructions"  id="special-text" placeholder="I want my pizza to have a ... "  value={Data.instructions}/>
             
 
 
@@ -183,9 +187,11 @@ const submit = (event) => {
 
             <pre className={'error'}>{JSON.stringify(postError, null, 2)}</pre>
 
-                <button type="submit" onSubmit={submit} disabled={disabled} id="order-button" className="btn"> 
-                <Link className="btn" to="/pizza/conferm">Submit Order</Link>
+                <button type="submit" onSubmit={submit} disabled={disabled} id="order-button" className="btn" name="order-button" data-cy="submit" > 
+               
+                <Link disabled={disabled} className="btn" to="/pizza/conferm"></Link>
                 
+                Submit Order
                 </button>
         </form>
 
